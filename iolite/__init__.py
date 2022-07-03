@@ -1,4 +1,4 @@
-from typing import cast, Union, Optional, Iterable, Dict, List, Any
+from typing import cast, Union, Optional, Iterable, Mapping, Sequence, Any
 from pathlib import Path
 import shutil
 import os
@@ -162,7 +162,7 @@ def read_json_lines(
         )
     ):
         try:
-            struct: Union[Dict, List] = json.loads(text)
+            struct: Union[Mapping, Sequence] = json.loads(text)
             if skip_empty and not struct:
                 continue
             yield struct
@@ -175,7 +175,7 @@ def read_json_lines(
 
 
 def _encode_json_lines(
-    structs: Iterable[Union[Dict, List]],
+    structs: Iterable[Union[Mapping, Sequence]],
     skip_empty: bool,
     ensure_ascii: bool,
     silent: bool,
@@ -197,7 +197,7 @@ def _encode_json_lines(
 
 def write_json_lines(
     raw_path: PathType,
-    structs: Iterable[Union[Dict, List]],
+    structs: Iterable[Union[Mapping, Sequence]],
     expandvars: bool = False,
     buffering: int = -1,
     encoding: Optional[str] = None,
@@ -242,7 +242,7 @@ def read_csv_lines(
     silent: bool = False,
     tqdm: bool = False,
     dialect: str = 'excel',
-    **fmtparams: Dict[str, Any],
+    **fmtparams: Mapping[str, Any],
 ):
     path = file(raw_path, expandvars=expandvars, exists=True)
 
@@ -307,7 +307,7 @@ def read_csv_lines(
 
 def write_csv_lines(
     raw_path: PathType,
-    structs: Iterable[Dict],
+    structs: Iterable[Mapping],
     expandvars: bool = False,
     buffering: int = -1,
     encoding: Optional[str] = None,
@@ -320,7 +320,7 @@ def write_csv_lines(
     ignore_unknown_key: bool = True,
     tqdm: bool = False,
     dialect: str = 'excel',
-    **fmtparams: Dict[str, Any],
+    **fmtparams: Mapping[str, Any],
 ):
     path = file(raw_path, expandvars=expandvars)
 
@@ -445,7 +445,7 @@ def read_json(
         newline=newline,
     ) as fin:
         try:
-            struct: Union[Dict, List] = json.load(fin)
+            struct: Union[Mapping, Sequence] = json.load(fin)
             return struct
         except json.JSONDecodeError:
             if not ignore_error:
@@ -457,7 +457,7 @@ def read_json(
 
 def write_json(
     raw_path: PathType,
-    struct: Union[Dict, List],
+    struct: Union[Mapping, Sequence],
     expandvars: bool = False,
     buffering: int = -1,
     encoding: Optional[str] = None,
@@ -496,7 +496,7 @@ def read_toml(
 
 def write_toml(
     raw_path: PathType,
-    struct: Dict,
+    struct: Mapping,
     expandvars: bool = False,
     buffering: int = -1,
     encoding: Optional[str] = None,
